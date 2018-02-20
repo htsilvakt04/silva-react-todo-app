@@ -16,7 +16,7 @@ class UserInputForm extends React.Component {
 class TodoItem extends React.Component {
     render () {
         return (
-            <li onClick={this.props.onClick}>{this.props.text}</li>
+            <li data-id={this.props.id}>{this.props.text}</li>
         )
     }
 }
@@ -28,7 +28,7 @@ class ListTodo extends React.Component {
     renderEachItem () {
         const itemList = [];
         this.props.todos.forEach((item, index) => {
-            itemList.push(<TodoItem onClick={this.props.onClick} key={index} text={item.text}/>)
+            itemList.push(<TodoItem key={index} id={index} text={item.text}/>)
         });
         return itemList;
     }
@@ -36,7 +36,7 @@ class ListTodo extends React.Component {
         const items = this.renderEachItem();
 
         return (
-            <ul>
+            <ul onClick={this.props.onClick}>
                 {items}
             </ul>
         );
@@ -52,8 +52,10 @@ class TodoTable extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
     }
-    handleDelete () {
-
+    handleDelete (event) {
+        const todoItemId = event.target.getAttribute('data-id');
+        this.props.todos.splice(todoItemId, 1);
+        this.setState(this.state);
     }
     handleChange (event) {
        const userText = event.target.value;
