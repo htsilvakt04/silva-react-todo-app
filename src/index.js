@@ -27,7 +27,11 @@ class ListTodo extends React.Component {
     }
     renderEachItem () {
         const itemList = [];
+        const filterText = this.props.todoText;
         this.props.todos.forEach((item, index) => {
+            if (item.text.indexOf(filterText) === -1) {
+                return;
+            }
             itemList.push(<TodoItem key={index} id={index} text={item.text}/>)
         });
         return itemList;
@@ -64,6 +68,9 @@ class TodoTable extends React.Component {
     handleSubmit (event) {
         event.preventDefault();
         const todoToSave = this.state.todoText;
+        if (todoToSave.trim() === '' || todoToSave === null || todoToSave === undefined) {
+            return;
+        }
         this.props.todos.push(
             {text: todoToSave}
         );
@@ -77,14 +84,15 @@ class TodoTable extends React.Component {
         return (
             <div id="todo-table">
                 <UserInputForm onSubmit={this.handleSubmit} onChange={this.handleChange} todoText={this.state.todoText}/>
-                <ListTodo onClick={this.handleDelete} todos={this.props.todos}/>
+                <ListTodo todoText={this.state.todoText} onClick={this.handleDelete} todos={this.props.todos}/>
             </div>
         );
     }
 
 }
 const TODOS = [
-    {text: "finish the excercise"}, {text: "drinking another cup of coffee"}, {text: "read English book"}
+    {text: "finish the excercise"}, {text: "drinking another cup of coffee"}, {text: "read English book"},
+    {text: "go bath"}, {text: "drink coffee right now"}, {text: "read English book"}
 ];
 
 
